@@ -142,7 +142,7 @@ public class MGMazeGenerator : MonoBehaviour {
                 while (!map[roomId].HasDirection(dir)) dir = (dir+1) % 4;
                 putDoor(map[roomId], dir);
             }
-
+        VocabListener.Instance.SetGateList(doormap);
     }
 
     private bool putDoor(MGMazeRoom room, int dir)

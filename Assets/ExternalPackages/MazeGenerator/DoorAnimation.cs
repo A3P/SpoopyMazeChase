@@ -38,11 +38,19 @@ public class DoorAnimation : MonoBehaviour {
         }    
     }
 
+    public void checkVocab(string answer)
+    {
+        var dist = Vector3.Distance(transform.position, trigger.transform.position);
+        if (dist < openOnRange && answer == vocabBase.GetName())
+        {
+            locked = false;
+        }
+    }
+
     private void SpawnRandomVocab()
     {
         int rndValue = rnd.Next(vocabCount);
-        Debug.Log("Vocab Count: " + vocabCount + " rndValue: " + rndValue);
-        vocabBase.SetVocab(rndValue);
+        vocabBase.SetVocab(rndValue);   
     }
 
     private void RaiseGate()

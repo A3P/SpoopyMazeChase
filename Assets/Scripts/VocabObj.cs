@@ -50,7 +50,6 @@ namespace InfusionEdutainment.Objects
             float gateDistance = Vector3.Distance(FirstPersonController.Instance.transform.position, transform.parent.transform.position);
             if(vocabDistance > gateDistance)
             {
-                Debug.Log("Reversed Z value");
                 transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -transform.localPosition.z);
             }
         }
