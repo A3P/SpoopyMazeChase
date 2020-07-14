@@ -6,6 +6,9 @@ public class DoorAnimation : MonoBehaviour {
 
     public VocabObj vocabBase;
 
+    public static System.Random rnd = new System.Random();
+    public int vocabCount;
+
     public float riseUpBy;
     public float openOnRange;
     public float speed;
@@ -19,6 +22,7 @@ public class DoorAnimation : MonoBehaviour {
         vocabBase = Instantiate(vocabBase, transform);
         vocabBase.transform.SetParent(transform);
         vocabBase.gameObject.SetActive(true);
+        vocabCount = vocabBase.chapter.vocabObj.Count;
         SpawnRandomVocab();
 	}
 	
@@ -29,7 +33,9 @@ public class DoorAnimation : MonoBehaviour {
 
     private void SpawnRandomVocab()
     {
-        vocabBase.SetVocab(5);
+        int rndValue = rnd.Next(vocabCount);
+        Debug.Log("Vocab Count: " + vocabCount + " rndValue: " + rndValue);
+        vocabBase.SetVocab(rndValue);
     }
 
     private void RaiseGate()
