@@ -15,8 +15,12 @@ public class DoorAnimation : MonoBehaviour {
     public GameObject trigger;
     private float initialY;
     private float toHeight;
-	// Use this for initialization
-	void Start () {
+
+    public bool locked { get; private set; }
+
+    // Use this for initialization
+    void Start () {
+        locked = true;
         trigger = GameObject.Find("FPSController");
         initialY = transform.position.y;
         vocabBase = Instantiate(vocabBase, transform);
@@ -28,8 +32,11 @@ public class DoorAnimation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        RaiseGate();
-	}
+        if (!locked)
+        {
+            RaiseGate();
+        }    
+    }
 
     private void SpawnRandomVocab()
     {
