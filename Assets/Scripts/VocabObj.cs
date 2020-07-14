@@ -64,9 +64,10 @@ namespace InfusionEdutainment.Objects
 
         public void SetVocab(int index)
         {
-            //this.meshFilter.mesh = chapter.vocabObjs[index].meshFilter.mesh;
-            //this.vocabRenderer.material = chapter.vocabObjs[index].vocabRenderer.sharedMaterial;
-            //this.text.text = chapter.vocabObjs[index].text.text;
+            Debug.Log(chapter.vocabObj[index].text.text);
+            this.meshFilter.mesh = chapter.vocabObj[index].meshFilter.sharedMesh;
+            this.vocabRenderer.material = chapter.vocabObj[index].vocabRenderer.sharedMaterial;
+            this.text.text = chapter.vocabObj[index].text.text;
         }
     }
 }
