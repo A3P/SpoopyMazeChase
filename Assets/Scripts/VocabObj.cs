@@ -17,7 +17,7 @@ namespace InfusionEdutainment.Objects
     {
         public MeshFilter meshFilter;
         public Renderer vocabRenderer;
-        public GameObject player;
+        public FirstPersonController player;
 
         public ChapterObjects chapter;
 
@@ -36,6 +36,7 @@ namespace InfusionEdutainment.Objects
 
         private void Start()
         {
+            player = FirstPersonController.Instance;
         }
 
         private void OnEnable()
@@ -45,9 +46,9 @@ namespace InfusionEdutainment.Objects
 
         private void Update()
         {
-            this.transform.forward = FirstPersonController.Instance.transform.forward;
-            float vocabDistance = Vector3.Distance(FirstPersonController.Instance.transform.position, transform.position);
-            float gateDistance = Vector3.Distance(FirstPersonController.Instance.transform.position, transform.parent.transform.position);
+            this.transform.forward = player.transform.forward;
+            float vocabDistance = Vector3.Distance(player.transform.position, transform.position);
+            float gateDistance = Vector3.Distance(player.transform.position, transform.parent.transform.position);
             if(vocabDistance > gateDistance)
             {
                 transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -transform.localPosition.z);
