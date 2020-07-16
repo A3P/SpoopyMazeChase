@@ -10,6 +10,7 @@ namespace InfusionEdutainment.Controllers
 
         public static GameController Instance { get; private set; }
         public GameObject Panel;
+        public GameObject ghost;
         
          private FirstPersonController player;
 
