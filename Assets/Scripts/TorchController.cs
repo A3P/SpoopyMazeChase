@@ -16,7 +16,7 @@ public class TorchController : MonoBehaviour
     public float flickerRate;
 
     private bool lightsOn = true;
-    private float nextFlickerTime;
+    private float nextFlickerTime = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,7 @@ public class TorchController : MonoBehaviour
         {
             pointLight.range = lightRange;
             pointLight.intensity = lightIntensity;
+            flame.Play();
             lightsOn = true;
         }
     }
