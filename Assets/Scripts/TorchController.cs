@@ -7,6 +7,7 @@ public class TorchController : MonoBehaviour
 {
     public GameObject ghost;
     public Light pointLight;
+    public ParticleSystem flame;
     public float minDistance;
     public float maxDistance;
 
@@ -45,11 +46,13 @@ public class TorchController : MonoBehaviour
             {
                 pointLight.range = 0;
                 pointLight.intensity = 0;
+                flame.Stop();
                 lightsOn = false;
             } else
             {
                 pointLight.range = lightRange;
                 pointLight.intensity = lightIntensity;
+                flame.Play();
                 lightsOn = true;
             }
             nextFlickerTime = Time.time + Random.Range(0, flickerRate);
