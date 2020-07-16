@@ -9,7 +9,7 @@ namespace InfusionEdutainment.Controllers
     {
 
         public static GameController Instance { get; private set; }
-        public GameObject Panel;
+        public PanelController panel;
         public GameObject ghost;
         
          private FirstPersonController player;
@@ -41,13 +41,16 @@ namespace InfusionEdutainment.Controllers
         public void GameOver()
         {
             Debug.Log("You have been spooked");
-            Panel.SetActive(true);
+            panel.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
         }
 
         public void Victory()
         {
             Debug.Log("Victory!");
+            panel.Victory();
+            panel.gameObject.SetActive(true);
+            player.gameObject.SetActive(false);
         }
     }
 }
