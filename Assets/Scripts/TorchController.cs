@@ -52,7 +52,7 @@ public class TorchController : MonoBehaviour
                 pointLight.intensity = lightIntensity;
                 lightsOn = true;
             }
-            nextFlickerTime = Time.time + flickerRate;
+            nextFlickerTime = Time.time + Random.Range(0, flickerRate);
         }
     }
 }
