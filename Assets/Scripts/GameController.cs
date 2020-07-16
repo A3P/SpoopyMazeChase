@@ -43,5 +43,10 @@ namespace InfusionEdutainment.Controllers
             Panel.SetActive(true);
             player.gameObject.SetActive(false);
         }
+
+        public void Victory()
+        {
+            Debug.Log("Victory!");
+        }
     }
 }
