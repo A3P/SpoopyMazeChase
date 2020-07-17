@@ -23,11 +23,11 @@ namespace InfusionEdutainment.Controllers
         {
             transform.LookAt(FirstPersonController.Instance.transform);
             // rotation to make up for the opposite forward vector of the model
-            transform.localRotation *= Quaternion.Euler(0, 180, 0);
+            //transform.localRotation *= Quaternion.Euler(0, 180, 0);
             if (Vector3.Distance(transform.position, player.transform.position) > minDistance)
             {
                 // Subtraction instead of addition due to model
-                transform.position -= transform.forward * moveSpeed * Time.deltaTime;
+                transform.position += transform.forward * moveSpeed * Time.deltaTime;
             } else
             {
                 GameController.Instance.GameOver();
