@@ -41,14 +41,20 @@ namespace InfusionEdutainment.Controllers
         public void GameOver()
         {
             Debug.Log("You have been spooked");
-            panel.gameObject.SetActive(true);
-            player.gameObject.SetActive(false);
+            panel.GameOver();
+            EndGame();
         }
 
         public void Victory()
         {
             Debug.Log("Victory!");
             panel.Victory();
+            EndGame();
+        }
+
+        public void EndGame()
+        {
+            ghost.SetActive(false);
             panel.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
         }
