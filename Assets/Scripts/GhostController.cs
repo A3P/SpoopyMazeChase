@@ -12,6 +12,7 @@ namespace InfusionEdutainment.Controllers
         public float scareDistance;
         public float phaseIntervalTime;
         public float phaseTime;
+        public Texture[] faces;
 
         private Vector3 originalLocalPosition;
         private FirstPersonController player;
@@ -51,6 +52,7 @@ namespace InfusionEdutainment.Controllers
                 phasedOut = true;
                 nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
                 phasedOutColor.a = 0;
+                meshRenderer.material.mainTexture = faces[0];
                 StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, phasedOutColor));
             }
             else if (phasedOut && nextPhaseTime < Time.time)
@@ -58,6 +60,7 @@ namespace InfusionEdutainment.Controllers
                 phasedOutColor.a = 1;
                 meshRenderer.material.color = phasedOutColor;
                 phasedOut = false;
+                meshRenderer.material.mainTexture = faces[3];
                 nextPhaseTime = Time.time + phaseIntervalTime;
             }
         }
