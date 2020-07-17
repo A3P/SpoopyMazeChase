@@ -12,8 +12,10 @@ namespace InfusionEdutainment.Controllers
         public float scareDistance;
         public float phaseIntervalTime;
         public float phaseTime;
+        public AudioClip laughAudioClip;
         public Texture[] faces;
 
+        private AudioSource audioSource;
         private Vector3 originalLocalPosition;
         private FirstPersonController player;
         private MeshRenderer meshRenderer;
@@ -25,7 +27,8 @@ namespace InfusionEdutainment.Controllers
         {
             originalLocalPosition = transform.localPosition;
             player = FirstPersonController.Instance;
-            meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            meshRenderer = GetComponent<MeshRenderer>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         // Update is called once per frame
@@ -50,6 +53,7 @@ namespace InfusionEdutainment.Controllers
             if (!phasedOut && nextPhaseTime < Time.time && distance < scareDistance)
             {
                 phasedOut = true;
+                audioSource.PlayOneShot(laughAudioClip, 0.2f);
                 nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
                 phasedOutColor.a = 0;
                 meshRenderer.material.mainTexture = faces[0];
