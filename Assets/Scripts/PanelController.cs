@@ -7,7 +7,8 @@ public class PanelController : MonoBehaviour
 {
 
     public TMP_Text text;
-    private string[] gameOverLines = {"You got spooked", "Get Spooked", "Boo", "Now we can be forever together :)", "Get dunked on", "try again :p", "One more? :p", "gotchu ;)" };
+    private string[] gameOverLines = {"You got spooked", "Get Spooked", "Boo", 
+        "Now we can be together, forever :)", "Get dunked on", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q" };
     private System.Random rnd = new System.Random();
 
     // Start is called before the first frame update

@@ -89,6 +89,10 @@ namespace InfusionEdutainment.Controllers
 
                 if (lerpProgress >= lerpDuration)
                 {
+                    float maxOffset = scareDistance / 2;
+                    float xOffset = transform.position.x + Random.Range(-maxOffset, maxOffset);
+                    float zOffset = transform.position.z + Random.Range(-maxOffset, maxOffset);
+                    transform.position = new Vector3(xOffset, transform.position.y, zOffset);
                     lerping = false;
                 }
             }
