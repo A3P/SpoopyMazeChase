@@ -9,6 +9,7 @@ public class PanelController : MonoBehaviour
     public TMP_Text text;
     private string[] gameOverLines = {"You got spooked", "Get Spooked", "Boo", 
         "Now we can be together, forever :)", "Get dunked on", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q" };
+    private string[] victoryLines = { "argh matey.\n you found my Doubloons", "Noooo, not my Doubloons!", "You can take my life, but not my Doubloons q-q"};
     private System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
@@ -24,11 +25,13 @@ public class PanelController : MonoBehaviour
 
     public void Victory()
     {
-        text.text = "argh matey.\n you found my doubloons";
+        text.text = victoryLines[rnd.Next(gameOverLines.Length)];
+        GameTimer.Instance.EndTimer();
     }
 
     public void GameOver()
     {
         text.text = gameOverLines[rnd.Next(gameOverLines.Length)];
+        GameTimer.Instance.EndTimer();
     }
 }
