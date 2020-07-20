@@ -1,3 +1,4 @@
+using InfusionEdutainment.Controllers;
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
@@ -11,6 +12,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
     public class FirstPersonController : MonoBehaviour
     {
         public static FirstPersonController Instance { get; private set; }
+
+        public FlashLightController flashLight;
 
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -75,8 +78,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            if (CrossPlatformInputManager.GetButtonDown("Fire1"))
+            {
+                flashLight.ToggleFlashLight();
+            }
+
             RotateView();
-            // the jump state needs to read here to make sure it is not missed
+            // the jump state needs to read here to make sure it is not 
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
