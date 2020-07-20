@@ -8,13 +8,16 @@ public class TorchController : MonoBehaviour
     public GameObject ghost;
     public Light pointLight;
     public ParticleSystem flame;
-    public float minDistance;
     public float maxDistance;
+    public AudioClip torchSound;
 
     public float lightRange;
     public float lightIntensity;
     public float flickerRate;
 
+    [SerializeField]
+    private AudioSource audioSource;
+    
     private bool lightsOn = true;
     private float nextFlickerTime = 0;
 
@@ -32,6 +35,7 @@ public class TorchController : MonoBehaviour
             flickerLights();
         } else if (!lightsOn)
         {
+            audioSource.PlayOneShot(torchSound);
             pointLight.range = lightRange;
             pointLight.intensity = lightIntensity;
             flame.Play();
@@ -51,6 +55,7 @@ public class TorchController : MonoBehaviour
                 lightsOn = false;
             } else
             {
+                audioSource.PlayOneShot(torchSound);
                 pointLight.range = lightRange;
                 pointLight.intensity = lightIntensity;
                 flame.Play();
