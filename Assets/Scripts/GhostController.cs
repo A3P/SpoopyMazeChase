@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
+using UnityStandardAssets.Utility;
 
 namespace InfusionEdutainment.Controllers
 {
@@ -49,28 +51,29 @@ namespace InfusionEdutainment.Controllers
 
         private void phaseInOut(float distance)
         {
-            Color phasedOutColor = meshRenderer.material.color;
+            Color targetColor = meshRenderer.material.color;
             if (!phasedOut && nextPhaseTime < Time.time && distance < scareDistance)
             {
                 phasedOut = true;
                 audioSource.PlayOneShot(laughAudioClip, 0.2f);
                 nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
-                phasedOutColor.a = 0;
+                targetColor.a = 0;
                 meshRenderer.material.mainTexture = faces[0];
-                StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, phasedOutColor));
+                StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, targetColor, true));
             }
             else if (phasedOut && nextPhaseTime < Time.time)
             {
-                phasedOutColor.a = 1;
-                meshRenderer.material.color = phasedOutColor;
                 phasedOut = false;
+                nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
+                targetColor.a = 1;
                 meshRenderer.material.mainTexture = faces[3];
-                nextPhaseTime = Time.time + phaseIntervalTime;
+                StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, targetColor, false));
             }
         }
 
-        private IEnumerator Lerp_MeshRenderer_Color(MeshRenderer target_MeshRender, float lerpDuration, Color startLerp, Color targetLerp)
+        private IEnumerator Lerp_MeshRenderer_Color(MeshRenderer target_MeshRender, float lerpDuration, Color startLerp, Color targetLerp, Boolean teleport)
         {
+            Vector3 tpPosition = player.transform.position;
             float lerpStart_Time = Time.time;
             float lerpProgress;
             bool lerping = true;
@@ -89,10 +92,8 @@ namespace InfusionEdutainment.Controllers
 
                 if (lerpProgress >= lerpDuration)
                 {
-                    float maxOffset = scareDistance / 2;
-                    float xOffset = transform.position.x + Random.Range(-maxOffset, maxOffset);
-                    float zOffset = transform.position.z + Random.Range(-maxOffset, maxOffset);
-                    transform.position = new Vector3(xOffset, transform.position.y, zOffset);
+                    if(teleport)
+                        transform.position = tpPosition;
                     lerping = false;
                 }
             }
