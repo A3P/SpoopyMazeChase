@@ -53,15 +53,17 @@ public class TorchController : MonoBehaviour
                 pointLight.intensity = 0;
                 flame.Stop();
                 lightsOn = false;
-            } else
+                nextFlickerTime = Time.time + Random.Range(0, flickerRate*3);
+            }
+            else
             {
                 audioSource.PlayOneShot(torchSound);
                 pointLight.range = lightRange;
                 pointLight.intensity = lightIntensity;
                 flame.Play();
                 lightsOn = true;
+                nextFlickerTime = Time.time + Random.Range(0, flickerRate);
             }
-            nextFlickerTime = Time.time + Random.Range(0, flickerRate);
         }
     }
 }
