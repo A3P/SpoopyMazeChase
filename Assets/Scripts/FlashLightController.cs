@@ -9,18 +9,25 @@ namespace InfusionEdutainment.Controllers
     {
         public float moveDistance;
         public float lerpDuration;
+        public float batteryDrain;
+        public BatteryUI battery;
 
+        private float charge;
         private bool isMoving = false;
         // Start is called before the first frame update
         void Start()
         {
-        
+            charge = 1f;
         }
 
         // Update is called once per frame
         void Update()
         {
-        
+            if(gameObject.activeInHierarchy)
+            {
+                charge -= batteryDrain;
+                battery.SetChargeLevel(charge);
+            }
         }
 
         public void ToggleFlashLight()
