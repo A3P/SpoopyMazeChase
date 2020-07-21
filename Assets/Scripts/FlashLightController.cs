@@ -23,11 +23,20 @@ namespace InfusionEdutainment.Controllers
         // Update is called once per frame
         void Update()
         {
-            if(gameObject.activeInHierarchy)
+            DrainBattery();
+        }
+
+        public void DrainBattery()
+        {
+            if (gameObject.activeInHierarchy && charge > 0)
             {
-                charge -= batteryDrain;
+                charge -= Time.deltaTime * batteryDrain;
+                if (charge < 0)
+                {
+                    charge = 0f;
+                }
                 battery.SetChargeLevel(charge);
-            }
+            }   
         }
 
         public void ToggleFlashLight()
