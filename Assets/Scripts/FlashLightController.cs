@@ -28,15 +28,17 @@ namespace InfusionEdutainment.Controllers
 
         public void DrainBattery()
         {
-            if (gameObject.activeInHierarchy && charge > 0)
+            if (gameObject.activeInHierarchy)
             {
                 charge -= Time.deltaTime * batteryDrain;
-                if (charge < 0)
+                
+                if (charge <= 0)
                 {
                     charge = 0f;
+                    ToggleFlashLight();
                 }
                 battery.SetChargeLevel(charge);
-            }   
+            }
         }
 
         public void ToggleFlashLight()
@@ -48,7 +50,7 @@ namespace InfusionEdutainment.Controllers
                 {
                     targetPosition.y -= moveDistance;
                     StartCoroutine(MoveFlashLight(lerpDuration, transform.localPosition, targetPosition, true));
-                } else
+                } else if (charge > 0)
                 {
                     gameObject.SetActive(true);
                     targetPosition.y += moveDistance;
@@ -59,7 +61,7 @@ namespace InfusionEdutainment.Controllers
 
         private IEnumerator MoveFlashLight(float lerpDuration, Vector3 startPosition, Vector3 targetPosition, Boolean hideObject)
         {
-            bool isMoving = true;
+            isMoving = true;
             float lerpStart_Time = Time.time;
             float lerpProgress;
             while (isMoving)
