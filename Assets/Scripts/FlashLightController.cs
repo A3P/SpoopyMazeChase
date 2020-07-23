@@ -9,36 +9,47 @@ namespace InfusionEdutainment.Controllers
     {
         public float moveDistance;
         public float lerpDuration;
-        public float batteryDrain;
+        public float drainRate;
+        public float chargeRate;
         public BatteryUI battery;
+        public Light spotLight;
 
+        private Renderer flashLightRenderer;
         private float charge;
         private bool isMoving = false;
         // Start is called before the first frame update
         void Start()
         {
             charge = 1f;
+            flashLightRenderer = GetComponent<Renderer>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            DrainBattery();
+            UpdateBattery();
         }
 
-        public void DrainBattery()
+        public void UpdateBattery()
         {
-            if (gameObject.activeInHierarchy)
+            if (flashLightRenderer.enabled)
             {
-                charge -= Time.deltaTime * batteryDrain;
+                charge -= Time.deltaTime * drainRate;
                 
                 if (charge <= 0)
                 {
                     charge = 0f;
                     ToggleFlashLight();
                 }
-                battery.SetChargeLevel(charge);
+            } else
+            {
+                charge += Time.deltaTime * chargeRate;
+                if(charge > 1f)
+                {
+                    charge = 1f;
+                }
             }
+            battery.SetChargeLevel(charge);
         }
 
         public void ToggleFlashLight()
@@ -46,13 +57,13 @@ namespace InfusionEdutainment.Controllers
             if (!isMoving)
             {
                 Vector3 targetPosition = transform.localPosition;
-                if(gameObject.activeInHierarchy)
+                if(flashLightRenderer.enabled)
                 {
                     targetPosition.y -= moveDistance;
                     StartCoroutine(MoveFlashLight(lerpDuration, transform.localPosition, targetPosition, true));
                 } else if (charge > 0)
                 {
-                    gameObject.SetActive(true);
+                    SetVisibility(true);
                     targetPosition.y += moveDistance;
                     StartCoroutine(MoveFlashLight(lerpDuration, transform.localPosition, targetPosition, false));
                 }
@@ -76,9 +87,15 @@ namespace InfusionEdutainment.Controllers
             }
             if (hideObject)
             {
-                gameObject.SetActive(false);
+                SetVisibility(false);
             }
             yield break;
+        }
+
+        private void SetVisibility(bool visible)
+        {
+            flashLightRenderer.enabled = visible;
+            spotLight.gameObject.SetActive(visible);
         }
 
     }

@@ -29,6 +29,9 @@ public class BatteryUI : MonoBehaviour
         if(chargePercent <= 0f)
         {
             SetColor(emptyColor);
+        } else
+        {
+            SetColor(regularColor);
         }
     }
 
