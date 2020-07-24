@@ -13,10 +13,15 @@ namespace InfusionEdutainment.Controllers
         public float chargeRate;
         public BatteryUI battery;
         public Light spotLight;
+        public float raycastDistance;
+        public float raycastRadius;
 
         private Renderer flashLightRenderer;
         private float charge;
         private bool isMoving = false;
+        private int ghostLayerMask = 1 << 8;
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -28,9 +33,23 @@ namespace InfusionEdutainment.Controllers
         void Update()
         {
             UpdateBattery();
+            if(flashLightRenderer.enabled)
+                GhostRayCast(); 
         }
 
-        public void UpdateBattery()
+        // Raycast seeking ghost
+        private void GhostRayCast()
+        {
+            Vector3 p1 = transform.position;
+            Vector3 p2 = p1 + transform.forward * raycastDistance;
+            RaycastHit[] hits = Physics.CapsuleCastAll(p1, p2, raycastRadius, transform.forward, raycastDistance, ghostLayerMask);
+            foreach(RaycastHit hit in hits)
+            {
+                hit.transform.gameObject.GetComponent<GhostController>().StunGhost();
+            }
+        }
+
+        private void UpdateBattery()
         {
             if (flashLightRenderer.enabled)
             {

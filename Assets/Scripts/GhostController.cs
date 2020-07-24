@@ -16,7 +16,9 @@ namespace InfusionEdutainment.Controllers
         public float phaseTime;
         public AudioClip laughAudioClip;
         public Texture[] faces;
-
+        public float stunDuration;
+        
+        private float stunTime;
         private AudioSource audioSource;
         private Vector3 originalLocalPosition;
         private FirstPersonController player;
@@ -36,20 +38,23 @@ namespace InfusionEdutainment.Controllers
         // Update is called once per frame
         void Update()
         {
-            transform.LookAt(FirstPersonController.Instance.transform);
-            float distance = Vector3.Distance(transform.position, player.transform.position);
-            if (distance > minDistance)
+            if (stunTime < Time.time)
             {
-                transform.position += transform.forward * moveSpeed * Time.deltaTime;
-
-                phaseInOut(distance);
-            } else
-            {
-                GameController.Instance.GameOver();
+                transform.LookAt(FirstPersonController.Instance.transform);
+                float distance = Vector3.Distance(transform.position, player.transform.position);
+                if (distance > minDistance)
+                {
+                    transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                    PhaseInOut(distance);
+                }
+                else
+                {
+                    GameController.Instance.GameOver();
+                }
             }
         }
 
-        private void phaseInOut(float distance)
+        private void PhaseInOut(float distance)
         {
             Color targetColor = meshRenderer.material.color;
             if (!phasedOut && nextPhaseTime < Time.time && distance < scareDistance)
@@ -77,9 +82,8 @@ namespace InfusionEdutainment.Controllers
             float lerpStart_Time = Time.time;
             float lerpProgress;
             bool lerping = true;
-            while (lerping)
+            while (lerping && stunTime < Time.time)
             {
-                yield return new WaitForEndOfFrame();
                 lerpProgress = Time.time - lerpStart_Time;
                 if (target_MeshRender != null)
                 {
@@ -96,9 +100,45 @@ namespace InfusionEdutainment.Controllers
                         transform.position = tpPosition;
                     lerping = false;
                 }
+                yield return new WaitForEndOfFrame();
             }
             yield break;
         }
 
+        private void SetGhostFace(int faceIndex)
+        {
+            Color targetColor = meshRenderer.material.color;
+            switch (faceIndex)
+            {
+                case 0:
+                    targetColor.a = 1;
+                    meshRenderer.material.color = targetColor;
+                    meshRenderer.material.mainTexture = faces[faceIndex];
+                    break;
+                case 2:
+                    targetColor.a = 1;
+                    meshRenderer.material.color = targetColor;
+                    meshRenderer.material.mainTexture = faces[faceIndex];
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private IEnumerator UnStun(float time)
+        {
+            yield return new WaitForSeconds(time);
+            SetGhostFace(0);
+        }
+
+        public void StunGhost()
+        {
+            if (stunTime < Time.time)
+            {
+                stunTime = Time.time + stunDuration;
+                SetGhostFace(2);
+                UnStun(stunDuration);
+            }
+        }
     }
 }

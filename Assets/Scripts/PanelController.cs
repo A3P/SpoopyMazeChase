@@ -8,7 +8,7 @@ public class PanelController : MonoBehaviour
 
     public TMP_Text text;
     private string[] gameOverLines = {"You got spooked", "Get Spooked", "Boo", 
-        "Now we can be together, forever :)", "Get dunked on", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q" };
+        "Now we can be together, forever :)", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q" };
     private string[] victoryLines = { "argh matey.\n you found my Doubloons", "Noooo, not my Doubloons!", "You can take my life, but not my Doubloons q-q"};
     private System.Random rnd = new System.Random();
 
