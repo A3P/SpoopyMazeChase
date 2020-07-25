@@ -111,13 +111,6 @@ namespace InfusionEdutainment.Controllers
             Color targetColor = meshRenderer.material.color;
             switch (faceIndex)
             {
-                case 0:
-                    targetColor.a = 1;
-                    meshRenderer.material.color = targetColor;
-                    meshRenderer.material.mainTexture = faces[faceIndex];
-                    phasedOut = false;
-                    audioSource.Play();
-                    break;
                 case 2:
                     targetColor.a = 1;
                     meshRenderer.material.color = targetColor;
@@ -125,6 +118,13 @@ namespace InfusionEdutainment.Controllers
                     phasedOut = false;
                     audioSource.Stop();
                     audioSource.PlayOneShot(cryAudioClip, 0.4f);
+                    break;
+                case 3:
+                    targetColor.a = 1;
+                    meshRenderer.material.color = targetColor;
+                    meshRenderer.material.mainTexture = faces[faceIndex];
+                    phasedOut = false;
+                    audioSource.Play();
                     break;
                 default:
                     break;
@@ -134,7 +134,7 @@ namespace InfusionEdutainment.Controllers
         private IEnumerator UnStun(float time)
         {
             yield return new WaitForSeconds(time);
-            SetGhostFace(0);
+            SetGhostFace(3);
         }
 
         public void StunGhost()
