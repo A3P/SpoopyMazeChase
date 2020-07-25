@@ -15,6 +15,7 @@ namespace InfusionEdutainment.Controllers
         public float phaseIntervalTime;
         public float phaseTime;
         public AudioClip laughAudioClip;
+        public AudioClip cryAudioClip;
         public Texture[] faces;
         public float stunDuration;
         
@@ -114,11 +115,16 @@ namespace InfusionEdutainment.Controllers
                     targetColor.a = 1;
                     meshRenderer.material.color = targetColor;
                     meshRenderer.material.mainTexture = faces[faceIndex];
+                    phasedOut = false;
+                    audioSource.Play();
                     break;
                 case 2:
                     targetColor.a = 1;
                     meshRenderer.material.color = targetColor;
                     meshRenderer.material.mainTexture = faces[faceIndex];
+                    phasedOut = false;
+                    audioSource.Stop();
+                    audioSource.PlayOneShot(cryAudioClip, 0.4f);
                     break;
                 default:
                     break;
@@ -137,7 +143,7 @@ namespace InfusionEdutainment.Controllers
             {
                 stunTime = Time.time + stunDuration;
                 SetGhostFace(2);
-                UnStun(stunDuration);
+                StartCoroutine(UnStun(stunDuration));
             }
         }
     }
