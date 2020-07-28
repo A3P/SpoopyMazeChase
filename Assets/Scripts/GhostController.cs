@@ -21,7 +21,6 @@ namespace InfusionEdutainment.Controllers
         public float stunDuration;
 
         private int faceState = 3;
-        private float stunTime;
         private AudioSource audioSource;
         private Vector3 originalLocalPosition;
         private FirstPersonController player;
@@ -41,7 +40,7 @@ namespace InfusionEdutainment.Controllers
         // Update is called once per frame
         void Update()
         {
-            if (stunTime < Time.time)
+            if (faceState != 2)
             {
                 transform.LookAt(FirstPersonController.Instance.transform);
                 float distance = Vector3.Distance(transform.position, player.transform.position);
@@ -134,9 +133,8 @@ namespace InfusionEdutainment.Controllers
 
         public void StunGhost()
         {
-            if (stunTime < Time.time)
+            if (faceState != 2)
             {
-                stunTime = Time.time + stunDuration;
                 SetGhostFace(2);
                 StartCoroutine(UnStun(stunDuration));
             }
