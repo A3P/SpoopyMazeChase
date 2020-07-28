@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using InfusionEdutainment.Objects;
+using InfusionEdutainment.Controllers;
 
 public class DoorAnimation : MonoBehaviour {
 
@@ -38,12 +39,13 @@ public class DoorAnimation : MonoBehaviour {
         }    
     }
 
-    public void checkVocab(string answer)
+    public void CheckVocab(string answer)
     {
         var dist = Vector3.Distance(transform.position, trigger.transform.position);
         if (dist < openOnRange && answer == vocabBase.GetName())
         {
             locked = false;
+            StatTracker.Instance.AddCorrectVocab(answer);
         }
     }
 

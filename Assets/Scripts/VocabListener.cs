@@ -52,7 +52,7 @@ public class VocabListener : MonoBehaviour
         Debug.Log("Recognized: " + args.text);
         foreach(DoorAnimation gate in gateList)
         {
-            gate.checkVocab(args.text);
+            gate.CheckVocab(args.text);
         }
     }
 
