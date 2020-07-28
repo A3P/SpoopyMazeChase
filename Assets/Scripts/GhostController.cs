@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.Utility;
@@ -10,7 +11,7 @@ namespace InfusionEdutainment.Controllers
     public class GhostController : MonoBehaviour
     {
         public float moveSpeed;
-        public float minDistance;
+        public float deathDistance;
         public float scareDistance;
         public float phaseIntervalTime;
         public float phaseTime;
@@ -18,14 +19,15 @@ namespace InfusionEdutainment.Controllers
         public AudioClip cryAudioClip;
         public Texture[] faces;
         public float stunDuration;
-        
+
+        private int faceState = 3;
         private float stunTime;
         private AudioSource audioSource;
         private Vector3 originalLocalPosition;
         private FirstPersonController player;
         private MeshRenderer meshRenderer;
         private float nextPhaseTime;
-        private bool phasedOut = false;
+        private Coroutine currentCoroutine;
 
         // Start is called before the first frame update
         void Start()
@@ -43,10 +45,10 @@ namespace InfusionEdutainment.Controllers
             {
                 transform.LookAt(FirstPersonController.Instance.transform);
                 float distance = Vector3.Distance(transform.position, player.transform.position);
-                if (distance > minDistance)
+                if (distance > deathDistance)
                 {
                     transform.position += transform.forward * moveSpeed * Time.deltaTime;
-                    PhaseInOut(distance);
+                    CheckScareDistance(distance);
                 }
                 else
                 {
@@ -55,78 +57,71 @@ namespace InfusionEdutainment.Controllers
             }
         }
 
-        private void PhaseInOut(float distance)
+        private void CheckScareDistance(float distance)
         {
-            Color targetColor = meshRenderer.material.color;
-            if (!phasedOut && nextPhaseTime < Time.time && distance < scareDistance)
+            if (faceState != 0 && nextPhaseTime < Time.time && distance < scareDistance)
             {
-                phasedOut = true;
-                audioSource.PlayOneShot(laughAudioClip, 0.2f);
-                nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
-                targetColor.a = 0;
-                meshRenderer.material.mainTexture = faces[0];
-                StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, targetColor, true));
-            }
-            else if (phasedOut && nextPhaseTime < Time.time)
-            {
-                phasedOut = false;
-                nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
-                targetColor.a = 1;
-                meshRenderer.material.mainTexture = faces[3];
-                StartCoroutine(Lerp_MeshRenderer_Color(meshRenderer, phaseTime, meshRenderer.material.color, targetColor, false));
+                SetGhostFace(0);
             }
         }
 
-        private IEnumerator Lerp_MeshRenderer_Color(MeshRenderer target_MeshRender, float lerpDuration, Color startLerp, Color targetLerp, Boolean teleport)
+        private IEnumerator Evanescence(MeshRenderer target_MeshRender, float lerpDuration, Color startLerp, Color targetLerp)
         {
             Vector3 tpPosition = player.transform.position;
             float lerpStart_Time = Time.time;
-            float lerpProgress;
-            bool lerping = true;
-            while (lerping && stunTime < Time.time)
+            float lerpProgress = Time.time - lerpStart_Time;
+            while (lerpProgress <= lerpDuration)
             {
                 lerpProgress = Time.time - lerpStart_Time;
-                if (target_MeshRender != null)
-                {
-                    target_MeshRender.material.color = Color.Lerp(startLerp, targetLerp, lerpProgress / lerpDuration);
-                }
-                else
-                {
-                    lerping = false;
-                }
-
-                if (lerpProgress >= lerpDuration)
-                {
-                    if(teleport)
-                        transform.position = tpPosition;
-                    lerping = false;
-                }
+                target_MeshRender.material.color = Color.Lerp(startLerp, targetLerp, lerpProgress / lerpDuration);
                 yield return new WaitForEndOfFrame();
             }
+            transform.position = tpPosition;
+            
+            lerpStart_Time = Time.time;
+            lerpProgress = Time.time - lerpStart_Time;
+            while(lerpProgress <= lerpDuration)
+            {
+                lerpProgress = Time.time - lerpStart_Time;
+                target_MeshRender.material.color = Color.Lerp(targetLerp, startLerp, lerpProgress / lerpDuration);
+                yield return new WaitForEndOfFrame();
+            }
+            SetGhostFace(3);
             yield break;
         }
 
         private void SetGhostFace(int faceIndex)
         {
+            if(currentCoroutine != null)
+                StopCoroutine(currentCoroutine);
             Color targetColor = meshRenderer.material.color;
             switch (faceIndex)
             {
+                case 0:
+                    faceState = faceIndex;
+                    targetColor.a = 0;
+                    nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
+                    meshRenderer.material.mainTexture = faces[faceIndex];
+                    audioSource.PlayOneShot(laughAudioClip, 0.2f);
+                    currentCoroutine = StartCoroutine(Evanescence(meshRenderer, phaseTime, meshRenderer.material.color, targetColor));
+                    break;
                 case 2:
+                    faceState = faceIndex;
                     targetColor.a = 1;
                     meshRenderer.material.color = targetColor;
                     meshRenderer.material.mainTexture = faces[faceIndex];
-                    phasedOut = false;
                     audioSource.Stop();
                     audioSource.PlayOneShot(cryAudioClip, 0.4f);
                     break;
                 case 3:
+                    faceState = faceIndex;
                     targetColor.a = 1;
                     meshRenderer.material.color = targetColor;
                     meshRenderer.material.mainTexture = faces[faceIndex];
-                    phasedOut = false;
                     audioSource.Play();
                     break;
                 default:
+                    Debug.Log("Did not set ghost face, hit default case in switch");
                     break;
             }
         }

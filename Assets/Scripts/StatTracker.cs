@@ -8,6 +8,8 @@ namespace InfusionEdutainment.Controllers
     {
         public static StatTracker Instance;
 
+        public PanelController panel;
+
         private int gatesOpened;
 
         private Dictionary<string, int> correctVocabs = new Dictionary<string, int>();
