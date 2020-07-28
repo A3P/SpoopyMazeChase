@@ -8,11 +8,9 @@ namespace InfusionEdutainment.Controllers
     {
         public static StatTracker Instance;
 
-        public PanelController panel;
+        public int gatesOpened = 0;
 
-        private int gatesOpened;
-
-        private Dictionary<string, int> correctVocabs = new Dictionary<string, int>();
+        public Dictionary<string, int> correctVocabs = new Dictionary<string, int>();
 
         private void Awake()
         {
@@ -35,7 +33,6 @@ namespace InfusionEdutainment.Controllers
             {
                 correctVocabs.Add(vocab, 1);
             }
-            Debug.Log(gatesOpened);
         }
     }
 }
