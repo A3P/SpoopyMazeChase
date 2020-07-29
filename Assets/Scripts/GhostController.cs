@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.Utility;
 
@@ -19,10 +20,12 @@ namespace InfusionEdutainment.Controllers
         public AudioClip cryAudioClip;
         public Texture[] faces;
         public float stunDuration;
+        public float maxHoverDistance;
+        public float hoverDuration;
 
         private int faceState = 3;
         private AudioSource audioSource;
-        private Vector3 originalLocalPosition;
+        private Vector3 originalPosition;
         private FirstPersonController player;
         private MeshRenderer meshRenderer;
         private float nextPhaseTime;
@@ -31,10 +34,11 @@ namespace InfusionEdutainment.Controllers
         // Start is called before the first frame update
         void Start()
         {
-            originalLocalPosition = transform.localPosition;
+            originalPosition = transform.position;
             player = FirstPersonController.Instance;
             meshRenderer = GetComponent<MeshRenderer>();
             audioSource = GetComponent<AudioSource>();
+            SetGhostFace(3);
         }
 
         // Update is called once per frame
@@ -56,6 +60,44 @@ namespace InfusionEdutainment.Controllers
             }
         }
 
+        public void StunGhost()
+        {
+            if (faceState != 2)
+            {
+                SetGhostFace(2);
+                StartCoroutine(UnStun(stunDuration));
+            }
+        }
+
+        private IEnumerator Hover()
+        {
+            float lerpStart_Time = Time.time;
+            float lerpProgress = Time.time - lerpStart_Time;
+            float lerpTarget = maxHoverDistance;
+            float currentHeight = transform.position.y;
+            while (faceState != 2)
+            {
+                lerpProgress = Time.time - lerpStart_Time;
+                float displacement = Mathf.Lerp(0, lerpTarget, lerpProgress/hoverDuration);
+                transform.position = new Vector3(transform.position.x, currentHeight + displacement, transform.position.z);
+                
+                if (lerpProgress > hoverDuration)
+                {
+                    currentHeight = transform.position.y;
+                    lerpStart_Time = Time.time;
+                    if(lerpTarget > 0)
+                    {
+                        lerpTarget = (-maxHoverDistance)*2;
+                    } else
+                    {
+                        lerpTarget = maxHoverDistance*2;
+                    }
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            yield break;
+        }
+
         private void CheckScareDistance(float distance)
         {
             if (faceState != 0 && nextPhaseTime < Time.time && distance < scareDistance)
@@ -75,8 +117,8 @@ namespace InfusionEdutainment.Controllers
                 target_MeshRender.material.color = Color.Lerp(startLerp, targetLerp, lerpProgress / lerpDuration);
                 yield return new WaitForEndOfFrame();
             }
-            transform.position = tpPosition;
-            
+            transform.position = new Vector3(tpPosition.x, originalPosition.y, tpPosition.z);
+
             lerpStart_Time = Time.time;
             lerpProgress = Time.time - lerpStart_Time;
             while(lerpProgress <= lerpDuration)
@@ -102,6 +144,7 @@ namespace InfusionEdutainment.Controllers
                     nextPhaseTime = Time.time + phaseIntervalTime + phaseTime;
                     meshRenderer.material.mainTexture = faces[faceIndex];
                     audioSource.PlayOneShot(laughAudioClip, 0.2f);
+                    currentCoroutine = StartCoroutine(Hover());
                     currentCoroutine = StartCoroutine(Evanescence(meshRenderer, phaseTime, meshRenderer.material.color, targetColor));
                     break;
                 case 2:
@@ -118,6 +161,7 @@ namespace InfusionEdutainment.Controllers
                     meshRenderer.material.color = targetColor;
                     meshRenderer.material.mainTexture = faces[faceIndex];
                     audioSource.Play();
+                    currentCoroutine = StartCoroutine(Hover());
                     break;
                 default:
                     Debug.Log("Did not set ghost face, hit default case in switch");
@@ -129,15 +173,6 @@ namespace InfusionEdutainment.Controllers
         {
             yield return new WaitForSeconds(time);
             SetGhostFace(3);
-        }
-
-        public void StunGhost()
-        {
-            if (faceState != 2)
-            {
-                SetGhostFace(2);
-                StartCoroutine(UnStun(stunDuration));
-            }
         }
     }
 }
