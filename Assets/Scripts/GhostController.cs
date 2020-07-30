@@ -22,6 +22,9 @@ namespace InfusionEdutainment.Controllers
         public float stunDuration;
         public float maxHoverDistance;
         public float hoverDuration;
+        public float headShakeDuration;
+        public float headShakeDegree;
+        public float headShakeDelta;
 
         private int faceState = 3;
         private AudioSource audioSource;
@@ -98,6 +101,45 @@ namespace InfusionEdutainment.Controllers
             yield break;
         }
 
+        private IEnumerator HeadShake()
+        {
+            //Vector3 originVector = new Vector3(0.0F, 0.0f, 0.0F);
+            Vector3 originVector = transform.localRotation.eulerAngles;
+            Vector3 destinationVector = originVector;
+            float currentDelta = headShakeDegree;
+            destinationVector.y += headShakeDegree;
+            float lerpStartTime = Time.time;
+            float lerpProgress = Time.time - lerpStartTime;
+            Quaternion from = Quaternion.Euler(originVector);
+            Quaternion to = Quaternion.Euler(destinationVector);
+            while (faceState == 2)
+            {
+                lerpProgress = Time.time - lerpStartTime;
+                this.transform.localRotation = Quaternion.Lerp(from, to, lerpProgress/headShakeDuration);
+                if (lerpProgress > headShakeDuration)
+                {
+                    lerpStartTime = Time.time;
+                    originVector = transform.localRotation.eulerAngles;
+                    originVector = destinationVector;
+                    destinationVector.y += -currentDelta;
+                    if(currentDelta > 0)
+                    {
+                        currentDelta = -currentDelta + headShakeDelta;
+                        destinationVector.y += currentDelta;
+                    } else
+                    {
+                        currentDelta = -currentDelta - headShakeDelta;
+                        destinationVector.y += currentDelta;
+                    }
+                    from = Quaternion.Euler(originVector);
+                    to = Quaternion.Euler(destinationVector);
+                    Debug.Log("currentDelta: " + currentDelta);
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            yield break;
+        }
+
         private void CheckScareDistance(float distance)
         {
             if (faceState != 0 && nextPhaseTime < Time.time && distance < scareDistance)
@@ -154,6 +196,7 @@ namespace InfusionEdutainment.Controllers
                     meshRenderer.material.mainTexture = faces[faceIndex];
                     audioSource.Stop();
                     audioSource.PlayOneShot(cryAudioClip, 0.4f);
+                    currentCoroutine = StartCoroutine(HeadShake());
                     break;
                 case 3:
                     faceState = faceIndex;
