@@ -10,7 +10,7 @@ public class PanelController : MonoBehaviour
     public TMP_Text endGameText;
     public TMP_Text correctVocabText;
     private string[] gameOverLines = {"You got spooked", "Get Spooked", "Boo", 
-        "Now we can be together, forever :)", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q" };
+        "Now we can be together, forever :)", "try again :p", "One more? :p", "gotchu ;)", "Don't give up now! q-q", "RIP q-q", "Rip in peace =)" };
     private string[] victoryLines = { "argh matey.\n you found my Doubloons", "Noooo, not my Doubloons!", "You can take my life, but not my Doubloons q-q"};
     private System.Random rnd = new System.Random();
 
@@ -27,7 +27,7 @@ public class PanelController : MonoBehaviour
 
     public void Victory()
     {
-        endGameText.text = victoryLines[rnd.Next(gameOverLines.Length)];
+        endGameText.text = victoryLines[rnd.Next(victoryLines.Length)];
         GameTimer.Instance.EndTimer();
         SetStats();
     }
