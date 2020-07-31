@@ -11,6 +11,7 @@ namespace InfusionEdutainment.Controllers
         public static GameController Instance { get; private set; }
         public PanelController panel;
         public GameObject ghost;
+        public int deathCount;
         
          private FirstPersonController player;
 
@@ -40,14 +41,13 @@ namespace InfusionEdutainment.Controllers
 
         public void GameOver()
         {
-            Debug.Log("You have been spooked");
+            deathCount++;
             panel.GameOver();
             EndGame();
         }
 
         public void Victory()
         {
-            Debug.Log("Victory!");
             panel.Victory();
             EndGame();
         }
