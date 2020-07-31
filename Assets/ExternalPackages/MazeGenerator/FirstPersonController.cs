@@ -80,7 +80,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             if (CrossPlatformInputManager.GetButtonDown("Fire1"))
             {
-                flashLight.ToggleFlashLight();
+                flashLight.ToggleFlashLight(true);
             }
 
             RotateView();

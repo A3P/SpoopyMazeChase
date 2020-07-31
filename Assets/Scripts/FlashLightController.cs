@@ -15,6 +15,7 @@ namespace InfusionEdutainment.Controllers
         public Light spotLight;
         public float raycastDistance;
         public float raycastRadius;
+        public float lastTimeUsed;
 
         private Renderer flashLightRenderer;
         private float charge;
@@ -58,7 +59,7 @@ namespace InfusionEdutainment.Controllers
                 if (charge <= 0)
                 {
                     charge = 0f;
-                    ToggleFlashLight();
+                    ToggleFlashLight(false);
                 }
             } else
             {
@@ -71,8 +72,10 @@ namespace InfusionEdutainment.Controllers
             battery.SetChargeLevel(charge);
         }
 
-        public void ToggleFlashLight()
+        public void ToggleFlashLight(bool setTime)
         {
+            if (setTime)
+                lastTimeUsed = Time.time;
             if (!isMoving)
             {
                 Vector3 targetPosition = transform.localPosition;
@@ -117,5 +120,9 @@ namespace InfusionEdutainment.Controllers
             spotLight.gameObject.SetActive(visible);
         }
 
+        public void SetLastTimeUsed()
+        {
+            lastTimeUsed = Time.time;
+        }
     }
 }
