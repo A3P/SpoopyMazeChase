@@ -11,6 +11,9 @@ namespace InfusionEdutainment.Controllers
         public Texture[] movementTutorial;
         public Texture[] flashLightTutorial;
         public Texture[] stunGhostTutorial;
+        public Texture[] runTutorial;
+        public Texture[] openGateTutorial;
+        public Texture[] findChestTutorial;
 
         public float tutorialDuration;
         public float timeTriggerIncrease;
@@ -29,7 +32,7 @@ namespace InfusionEdutainment.Controllers
             tutorialsQueue = new Queue<Texture[]>();
             tutorialsActive = true;
             image = gameObject.GetComponent<RawImage>();
-            AddToQueue(movementTutorial);
+            ShowAllTutorials();
         }
 
         // Update is called once per frame
@@ -46,6 +49,16 @@ namespace InfusionEdutainment.Controllers
         public void SetTutorialsActive(bool activeStatus)
         {
             tutorialsActive = activeStatus;
+        }
+
+        private void ShowAllTutorials()
+        {
+            AddToQueue(movementTutorial);
+            AddToQueue(runTutorial);
+            AddToQueue(openGateTutorial);
+            AddToQueue(flashLightTutorial);
+            AddToQueue(stunGhostTutorial);
+            AddToQueue(findChestTutorial);
         }
 
         private void ShowNextTutorial()
