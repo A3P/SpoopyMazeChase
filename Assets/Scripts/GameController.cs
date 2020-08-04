@@ -12,8 +12,9 @@ namespace InfusionEdutainment.Controllers
         public PanelController panel;
         public GameObject ghost;
         public int deathCount;
-        
-         private FirstPersonController player;
+        public Tutorial tutorial;
+
+        private FirstPersonController player;
 
         private void Awake()
         {
@@ -54,6 +55,7 @@ namespace InfusionEdutainment.Controllers
 
         public void EndGame()
         {
+            tutorial.SetTutorialsActive(false);
             ghost.SetActive(false);
             panel.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
