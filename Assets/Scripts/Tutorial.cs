@@ -20,21 +20,24 @@ namespace InfusionEdutainment.Controllers
         private int deathCount;
         private Coroutine currentCoroutine;
         private RawImage image;
+        private Queue<Texture[]> tutorialsQueue;
         // Start is called before the first frame update
         void Start()
         {
+            tutorialsQueue = new Queue<Texture[]>();
             tutorialsActive = true;
             image = gameObject.GetComponent<RawImage>();
-            currentCoroutine = StartCoroutine(ShowTutorial(movementTutorial));
+            AddToQueue(movementTutorial);
         }
 
         // Update is called once per frame
         void Update()
         {
             if ((Time.time - flashLight.lastTimeUsed) > flashLightTimeTrigger && currentCoroutine == null) {
-                currentCoroutine = StartCoroutine(ShowTutorial(flashLightTutorial));
+                AddToQueue(flashLightTutorial);
                 flashLightTimeTrigger += timeTriggerIncrease;
             }
+            ShowNextTutorial();
         }
 
         public void SetTutorialsActive(bool activeStatus)
@@ -42,7 +45,20 @@ namespace InfusionEdutainment.Controllers
             tutorialsActive = activeStatus;
         }
 
-        public IEnumerator ShowTutorial(Texture[] tutorials)
+        private void ShowNextTutorial()
+        {
+            if (image.enabled == false && tutorialsQueue.Count != 0)
+            {
+                currentCoroutine = StartCoroutine(ShowTutorial(tutorialsQueue.Dequeue()));
+            }
+        }
+
+        private void AddToQueue(Texture[] tutorial)
+        {
+            tutorialsQueue.Enqueue(tutorial);
+        }
+
+        private IEnumerator ShowTutorial(Texture[] tutorials)
         {
             if (tutorialsActive)
             {
