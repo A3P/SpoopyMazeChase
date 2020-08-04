@@ -12,6 +12,7 @@ namespace InfusionEdutainment.Controllers
         public Texture[] flashLightTutorial;
         public float tutorialDuration;
         public float timeTriggerIncrease;
+        public bool tutorialsActive;
 
         public FlashLightController flashLight;
         public float flashLightTimeTrigger;
@@ -22,8 +23,8 @@ namespace InfusionEdutainment.Controllers
         // Start is called before the first frame update
         void Start()
         {
+            tutorialsActive = true;
             image = gameObject.GetComponent<RawImage>();
-            image.enabled = false;
             currentCoroutine = StartCoroutine(ShowTutorial(movementTutorial));
         }
 
@@ -36,19 +37,28 @@ namespace InfusionEdutainment.Controllers
             }
         }
 
+        public void SetTutorialsActive(bool activeStatus)
+        {
+            tutorialsActive = activeStatus;
+        }
+
         public IEnumerator ShowTutorial(Texture[] tutorials)
         {
-            image.enabled = true;
-            float startTime = Time.time;
-            for (int i = 0; (Time.time - startTime) < tutorialDuration; i++)
+            if (tutorialsActive)
             {
-                i = i % tutorials.Length;
-                image.texture = tutorials[i];
-                yield return new WaitForSeconds(0.5f);
+                Debug.Log("Show Tutorial");
+                image.enabled = true;
+                float startTime = Time.time;
+                for (int i = 0; (Time.time - startTime) < tutorialDuration; i++)
+                {
+                    i = i % tutorials.Length;
+                    image.texture = tutorials[i];
+                    yield return new WaitForSeconds(0.5f);
+                }
+                image.enabled = false;
+                currentCoroutine = null;
+                yield break;
             }
-            image.enabled = false;
-            currentCoroutine = null;
-            yield break;
         }
     }
 }
