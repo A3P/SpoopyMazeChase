@@ -10,6 +10,8 @@ namespace InfusionEdutainment.Controllers
     {
         public Texture[] movementTutorial;
         public Texture[] flashLightTutorial;
+        public Texture[] stunGhostTutorial;
+
         public float tutorialDuration;
         public float timeTriggerIncrease;
         public bool tutorialsActive;
@@ -35,6 +37,7 @@ namespace InfusionEdutainment.Controllers
         {
             if ((Time.time - flashLight.lastTimeUsed) > flashLightTimeTrigger && currentCoroutine == null) {
                 AddToQueue(flashLightTutorial);
+                AddToQueue(stunGhostTutorial);
                 flashLightTimeTrigger += timeTriggerIncrease;
             }
             ShowNextTutorial();
