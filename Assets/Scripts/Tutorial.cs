@@ -78,7 +78,6 @@ namespace InfusionEdutainment.Controllers
         {
             if (tutorialsActive)
             {
-                Debug.Log("Show Tutorial");
                 image.enabled = true;
                 float startTime = Time.time;
                 for (int i = 0; (Time.time - startTime) < tutorialDuration; i++)

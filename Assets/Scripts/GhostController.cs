@@ -133,7 +133,6 @@ namespace InfusionEdutainment.Controllers
                     }
                     from = Quaternion.Euler(originVector);
                     to = Quaternion.Euler(destinationVector);
-                    Debug.Log("currentDelta: " + currentDelta);
                 }
                 yield return new WaitForEndOfFrame();
             }
