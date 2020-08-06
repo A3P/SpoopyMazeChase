@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
+using InfusionEdutainment.Controllers;
 
 namespace InfusionEdutainment.Objects
 {
@@ -75,7 +76,36 @@ namespace InfusionEdutainment.Objects
         {
             this.meshFilter.mesh = chapter.vocabObj[index].meshFilter.sharedMesh;
             this.vocabRenderer.material = chapter.vocabObj[index].vocabRenderer.sharedMaterial;
-            this.text.text = chapter.vocabObj[index].text.text;
+
+            switch(GameController.Instance.difficulty)
+            {
+                case Difficulty.easy:
+                    this.text.text = chapter.vocabObj[index].text.text;
+                    break;
+                
+                case Difficulty.medium:
+                    this.text.text = chapter.vocabObj[index].text.text;
+
+                    int prevID = index;
+                    int id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
+                    for(int i = 0; i < 2; i++)
+                    {
+                        while(id == index || id == prevID)
+                            id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
+
+                        prevID = id;
+                        text.text += "\n" + chapter.vocabObj[id].text.text;
+                    }
+
+                    break;
+                
+                case Difficulty.hard:
+                    text.gameObject.SetActive(false);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ namespace InfusionEdutainment.Controllers
         public int deathCount;
         public Tutorial tutorial;
 
+        public Difficulty difficulty;
+
         private FirstPersonController player;
 
         private void Awake()
@@ -60,5 +62,12 @@ namespace InfusionEdutainment.Controllers
             panel.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
         }
+    }
+
+    public enum Difficulty
+    {
+        easy,
+        medium,
+        hard
     }
 }

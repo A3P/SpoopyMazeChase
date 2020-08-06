@@ -47,6 +47,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+        [Header("PauseMenu")]
+        bool paused;
+        public GameObject pauseMenu;
+
         private void Awake()
         {
             if (Instance != null)
@@ -78,6 +82,27 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            if(CrossPlatformInputManager.GetButtonDown("Menu"))
+            {
+                if(paused)
+                {
+                    Cursor.visible = false;
+                    pauseMenu.SetActive(false);
+                    Time.timeScale = 1;
+                    paused = false;
+                }
+                else
+                {
+                    Time.timeScale = 0;
+                    Cursor.visible = true;
+                    pauseMenu.SetActive(true);
+                    paused = true;
+                }
+            }
+
+            if (paused)
+                return;
+
             if (CrossPlatformInputManager.GetButtonDown("Fire1"))
             {
                 flashLight.ToggleFlashLight(true);
