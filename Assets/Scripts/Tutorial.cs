@@ -80,7 +80,7 @@ namespace InfusionEdutainment.Controllers
             {
                 image.enabled = true;
                 float startTime = Time.time;
-                for (int i = 0; (Time.time - startTime) < tutorialDuration; i++)
+                for (int i = 0; (Time.time - startTime) < tutorialDuration && tutorialsActive; i++)
                 {
                     i = i % tutorials.Length;
                     image.texture = tutorials[i];
