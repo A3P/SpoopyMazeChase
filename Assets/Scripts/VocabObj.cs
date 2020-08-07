@@ -19,6 +19,7 @@ namespace InfusionEdutainment.Objects
         public MeshFilter meshFilter;
         public Renderer vocabRenderer;
         public FirstPersonController player;
+        public string correctAnswer;
 
         public ChapterObjects chapter;
 
@@ -32,7 +33,6 @@ namespace InfusionEdutainment.Objects
 
         void Awake()
         {
-                
         }
 
         private void Start()
@@ -69,7 +69,7 @@ namespace InfusionEdutainment.Objects
 
         public string GetName()
         {
-            return text.text;
+            return correctAnswer;
         }
 
         public void SetVocab(int index)
@@ -77,7 +77,8 @@ namespace InfusionEdutainment.Objects
             this.meshFilter.mesh = chapter.vocabObj[index].meshFilter.sharedMesh;
             this.vocabRenderer.material = chapter.vocabObj[index].vocabRenderer.sharedMaterial;
 
-            switch(GameController.Instance.difficulty)
+            correctAnswer = chapter.vocabObj[index].text.text;
+            switch (GameController.Instance.difficulty)
             {
                 case Difficulty.easy:
                     this.text.text = chapter.vocabObj[index].text.text;

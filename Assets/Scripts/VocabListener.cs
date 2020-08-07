@@ -62,6 +62,7 @@ public class VocabListener : MonoBehaviour
         int index = 0;
         foreach (VocabObj vocab in chapter.vocabObj)
         {
+            Debug.Log(vocab.GetName());
             keywords[index++] = vocab.GetName();
         }
     }
