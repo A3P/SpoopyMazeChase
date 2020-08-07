@@ -33,6 +33,7 @@ namespace InfusionEdutainment.Controllers
         // Start is called before the first frame update
         void Start()
         {
+            Cursor.visible = false;
             player = FirstPersonController.Instance;
         }
 
@@ -57,6 +58,7 @@ namespace InfusionEdutainment.Controllers
 
         public void EndGame()
         {
+            Cursor.visible = true;
             tutorial.SetTutorialsActive(false);
             ghost.SetActive(false);
             panel.gameObject.SetActive(true);
