@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Title : MonoBehaviour
 {
     public Transform flashLight;
-    public Transform spotLight;
+    public Image spotLight;
     public float flashLightDuration;
     public float spotLightOffset;
     public float flashLightRotation;
@@ -31,8 +31,9 @@ public class Title : MonoBehaviour
 
     private void EnterFlashLight()
     {
-        Vector3 targetPosition = new Vector3(spotLight.position.x, spotLight.position.y + spotLightOffset, spotLight.position.z);
+        Vector3 targetPosition = new Vector3(spotLight.transform.position.x, spotLight.transform.position.y + spotLightOffset, spotLight.transform.position.z);
         DOTween.To(() => flashLight.position, x => flashLight.position = x, targetPosition, flashLightDuration);
+        spotLight.DOFade(1f, flashLightDuration);
         Vector3 rotation = new Vector3(0f, 0f, flashLightRotation);
         flashLight.DORotate(rotation, flashLightDuration, RotateMode.FastBeyond360);
     }
