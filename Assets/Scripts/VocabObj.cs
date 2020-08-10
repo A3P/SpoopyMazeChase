@@ -85,17 +85,26 @@ namespace InfusionEdutainment.Objects
                     break;
                 
                 case Difficulty.medium:
-                    this.text.text = chapter.vocabObj[index].text.text;
 
                     int prevID = index;
                     int id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
-                    for(int i = 0; i < 2; i++)
-                    {
-                        while(id == index || id == prevID)
-                            id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
 
-                        prevID = id;
-                        text.text += "\n" + chapter.vocabObj[id].text.text;
+                    this.text.text = "";
+                    int correctAnswerOrder = UnityEngine.Random.Range(0, 3);
+                    for(int i = 0; i < 3; i++)
+                    {
+                        if (correctAnswerOrder == i)
+                        {
+                            text.text += chapter.vocabObj[index].text.text + "\n";
+                        }
+                        else
+                        {
+                            while (id == index || id == prevID)
+                                id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
+
+                            prevID = id;
+                            text.text += chapter.vocabObj[id].text.text + "\n";
+                        }
                     }
 
                     break;
