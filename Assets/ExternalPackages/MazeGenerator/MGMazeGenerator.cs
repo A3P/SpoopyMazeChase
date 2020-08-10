@@ -4,6 +4,7 @@ using UnityEditor;
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using InfusionEdutainment.Controllers;
 
 public class MGMazeGenerator : MonoBehaviour {
 
@@ -30,8 +31,10 @@ public class MGMazeGenerator : MonoBehaviour {
     private bool finishPut = false;
     private int[] indexes;
 
+    private GameController gameController;
+
     void Start () {
-        
+        SetDifficulty();
         if (generateOnRuntime)
             Generate();
     }
@@ -252,6 +255,28 @@ public class MGMazeGenerator : MonoBehaviour {
             int a = indexes[k];
             indexes[k] = indexes[j];
             indexes[j] = a;
+        }
+    }
+
+    private void SetDifficulty()
+    {
+        switch(GameController.Instance.difficulty)
+        {
+            case GameSettings.Difficulty.easy:
+                roomsCountToGenerate = 7;
+                minDistanceToFinish = 3;
+                doorsCount = 7;
+                break;
+            case GameSettings.Difficulty.medium:
+                roomsCountToGenerate = 12;
+                minDistanceToFinish = 4;
+                doorsCount = 12;
+                break;
+            case GameSettings.Difficulty.hard:
+                roomsCountToGenerate = 20;
+                minDistanceToFinish = 5;
+                doorsCount = 20;
+                break;
         }
     }
 
