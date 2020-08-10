@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace InfusionEdutainment.Controllers
 {
@@ -40,6 +41,7 @@ namespace InfusionEdutainment.Controllers
         public void SetDifficulty(int difficulty)
         {
             currentDifficulty = (Difficulty)difficulty;
+            SceneManager.LoadScene("Game");
         }
 
         public enum Difficulty

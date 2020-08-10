@@ -14,7 +14,7 @@ namespace InfusionEdutainment.Controllers
         public int deathCount;
         public Tutorial tutorial;
 
-        public Difficulty difficulty;
+        public GameSettings.Difficulty difficulty;
 
         private FirstPersonController player;
 
@@ -28,6 +28,8 @@ namespace InfusionEdutainment.Controllers
             {
                 Instance = this;
             }
+            GameSettings settings = GameObject.FindGameObjectWithTag("Settings").GetComponent<GameSettings>();
+            difficulty = settings.currentDifficulty;
         }
 
         // Start is called before the first frame update
@@ -64,12 +66,5 @@ namespace InfusionEdutainment.Controllers
             panel.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
         }
-    }
-
-    public enum Difficulty
-    {
-        easy,
-        medium,
-        hard
     }
 }

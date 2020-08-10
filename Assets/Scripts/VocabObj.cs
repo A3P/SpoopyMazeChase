@@ -80,11 +80,11 @@ namespace InfusionEdutainment.Objects
             correctAnswer = chapter.vocabObj[index].text.text;
             switch (GameController.Instance.difficulty)
             {
-                case Difficulty.easy:
+                case GameSettings.Difficulty.easy:
                     this.text.text = chapter.vocabObj[index].text.text;
                     break;
                 
-                case Difficulty.medium:
+                case GameSettings.Difficulty.medium:
 
                     int prevID = index;
                     int id = UnityEngine.Random.Range(0, chapter.vocabObj.Count);
@@ -109,7 +109,7 @@ namespace InfusionEdutainment.Objects
 
                     break;
                 
-                case Difficulty.hard:
+                case GameSettings.Difficulty.hard:
                     text.gameObject.SetActive(false);
                     break;
 
