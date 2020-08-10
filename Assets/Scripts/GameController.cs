@@ -16,7 +16,9 @@ namespace InfusionEdutainment.Controllers
 
         public GameSettings.Difficulty difficulty;
 
-        private FirstPersonController player;
+        public FirstPersonController player;
+
+        private bool gameFinished = false;
 
         private void Awake()
         {
@@ -47,19 +49,26 @@ namespace InfusionEdutainment.Controllers
 
         public void GameOver()
         {
-            deathCount++;
-            panel.GameOver();
-            EndGame();
+            if (!gameFinished)
+            {
+                deathCount++;
+                panel.GameOver();
+                EndGame();
+            }
         }
 
         public void Victory()
         {
-            panel.Victory();
-            EndGame();
+            if (!gameFinished)
+            {
+                panel.Victory();
+                EndGame();
+            }
         }
 
         public void EndGame()
         {
+            gameFinished = true;
             Cursor.visible = true;
             tutorial.SetTutorialsActive(false);
             ghost.SetActive(false);
