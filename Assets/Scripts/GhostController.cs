@@ -140,7 +140,7 @@ namespace InfusionEdutainment.Controllers
 
         private void CheckScareDistance(float distance)
         {
-            if (faceState != 0 && nextPhaseTime < Time.time && distance < scareDistance)
+            if (GameSettings.Difficulty.easy != GameController.Instance.difficulty && faceState != 0 && nextPhaseTime < Time.time && distance < scareDistance)
             {
                 SetGhostFace(0);
             }
