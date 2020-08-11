@@ -21,18 +21,6 @@ namespace InfusionEdutainment.Controllers
             DontDestroyOnLoad(this.gameObject);
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void TestButton()
         {
             Debug.Log("Test Button");
@@ -41,7 +29,6 @@ namespace InfusionEdutainment.Controllers
         public void SetDifficulty(int difficulty)
         {
             currentDifficulty = (Difficulty)difficulty;
-            SceneManager.LoadScene("Game");
         }
 
         public enum Difficulty

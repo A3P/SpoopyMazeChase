@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using InfusionEdutainment.Controllers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,7 @@ public class Title : MonoBehaviour
     public float titleOffset;
 
     private AudioSource audioSource;
+    private GameSettings gameSettings;
 
     private void Awake()
     {
@@ -35,6 +37,8 @@ public class Title : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+        gameSettings = GameObject.FindGameObjectWithTag("Settings").GetComponent<GameSettings>();
         EnterGhost();
         StartCoroutine(EnterFlashLight());
     }
@@ -42,6 +46,12 @@ public class Title : MonoBehaviour
     public void StartTutorial()
     {
         SceneManager.LoadScene("Tutorial");
+    }
+
+    public void StartGame(int difficulty)
+    {
+        gameSettings.SetDifficulty(difficulty);
+        SceneManager.LoadScene("Game");
     }
 
     private IEnumerator EnterFlashLight()
