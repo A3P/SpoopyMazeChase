@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Title : MonoBehaviour
@@ -37,11 +38,10 @@ public class Title : MonoBehaviour
         EnterGhost();
         StartCoroutine(EnterFlashLight());
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    public void StartTutorial()
     {
-
+        SceneManager.LoadScene("Tutorial");
     }
 
     private IEnumerator EnterFlashLight()
